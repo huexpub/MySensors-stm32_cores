@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MySensors Arduino library handles the wireless radio link and protocol
  * between your home built sensors/actuators and HA controller of choice.
  * The sensors forms a self healing radio network with optional repeaters. Each
@@ -15,19 +15,10 @@
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * version 2 as published by the Free Software Foundation.
- *
- * Arduino core for STM32: https://github.com/stm32duino/Arduino_Core_STM32
- *
- * MySensors Arduino Core STM32 implementation, Copyright (C) 2019-2020 Olivier Mauti <olivier@mysensors.org>
  */
 
 #define ARDUINO_MAIN
 #include "Arduino.h"
-
-// Weak empty variant initialization function.
-// May be redefined by variant files.
-void initVariant() __attribute__((weak));
-void initVariant() { }
 
 // Force init to be called *first*, i.e. before static object allocation.
 // Otherwise, statically allocated objects that need HAL may fail.
@@ -59,17 +50,17 @@ int main(void)
 	initVariant();
 
 	_begin(); // Startup MySensors library
-
-	for (;;) {
+	for(;;) {
+		_process();  // Process incoming data
 #if defined(CORE_CALLBACK)
 		CoreCallback();
 #endif
-		_process();	// Process incoming data
-		loop();
+		if (loop) {
+			loop(); // Call sketch loop
+		}
 		if (serialEventRun) {
 			serialEventRun();
 		}
 	}
-
 	return 0;
 }
